@@ -1,5 +1,5 @@
 import { initializeApp } from "firebase/app";
-import { getAnalytics } from "firebase/analytics";
+import { getAnalytics, isSupported } from "firebase/analytics";
 import {
   getAuth,
   GoogleAuthProvider,
@@ -20,7 +20,13 @@ const firebaseConfig = {
 };
 
 const app = initializeApp(firebaseConfig);
-const analytics = typeof window !== 'undefined' ? getAnalytics(app) : null;
+
+// Initialize analytics only if supported and in production
+const analytics = null;
+if (typeof window !== 'undefined') {
+  isSupported().then(yes => yes && getAnalytics(app));
+}
+
 const auth = getAuth(app);
 const provider = new GoogleAuthProvider();
 
